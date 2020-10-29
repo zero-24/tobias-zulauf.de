@@ -1,0 +1,46 @@
+##### Pagespeed Browser Cache
+<IfModule mod_expires.c>
+	ExpiresActive On
+	<FilesMatch "\.(css|js)$"> 
+		ExpiresDefault "access 1 month" 
+	</FilesMatch>
+	<FilesMatch "\.(jpg|jpeg|gif|png|ico)$"> 
+		ExpiresDefault "access 6 months" 
+	</FilesMatch>
+	<FilesMatch "\.(mp3|flv|pdf|woff|eot|ttf|otf|woff|svg)$"> 
+		ExpiresDefault "access 1 year" 
+	</FilesMatch>
+</IfModule>
+##### Pagespeed Browser Cache
+
+##### Pagespeed kompression
+# Deflate Compression by MimeType
+<IfModule mod_deflate.c>
+	<FilesMatch "\.(js|jpg|jpeg|gif|png|css|otf|woff|svg)$">
+		ExpiresActive on
+		ExpiresDefault "access plus 1 month"
+		SetOutputFilter DEFLATE
+	</FilesMatch>
+</IfModule>
+##### Pagespeed kompression
+
+##### Pagespeed Cache Header
+<IfModule mod_headers.c>
+    Header set Cache-Control "max-age=31536000"
+</IfModule>
+##### Pagespeed Cache Header
+
+##### HTTP Headers
+<IfModule mod_headers.c>
+    Header set Cross-Origin-Opener-Policy "same-origin"
+    Header set Cross-Origin-Resource-Policy "same-origin"
+    Header set Feature-Policy: "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'"
+    Header set X-Frame-Options "DENY"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "no-referrer"
+    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'sha256-JfYgjAb4XZJSe1AUBWfJhRKo9xfSpr5ledAcv2OYL3o='; frame-ancestors 'none'; report-uri https://www.jah-tz.de/plugins/system/httpheader/csp-reporter.php?source=tobias-zulauf.de"
+</IfModule>
+#### HTTP Headers
+
+#### 404 for .git
+RedirectMatch 404 /\.git
