@@ -1,14 +1,14 @@
 ##### Pagespeed Browser Cache
 <IfModule mod_expires.c>
 	ExpiresActive On
-	<FilesMatch "\.(css|js)$"> 
-		ExpiresDefault "access 1 month" 
+	<FilesMatch "\.(css|js)$">
+		ExpiresDefault "access 1 month"
 	</FilesMatch>
-	<FilesMatch "\.(jpg|jpeg|gif|png|ico)$"> 
-		ExpiresDefault "access 6 months" 
+	<FilesMatch "\.(jpg|jpeg|gif|png|ico)$">
+		ExpiresDefault "access 6 months"
 	</FilesMatch>
-	<FilesMatch "\.(mp3|flv|pdf|woff|eot|ttf|otf|woff|svg)$"> 
-		ExpiresDefault "access 1 year" 
+	<FilesMatch "\.(mp3|flv|pdf|woff|eot|ttf|otf|woff|svg)$">
+		ExpiresDefault "access 1 year"
 	</FilesMatch>
 </IfModule>
 ##### Pagespeed Browser Cache
@@ -42,5 +42,6 @@
 </IfModule>
 #### HTTP Headers
 
-#### 404 for .git
+#### Dont allow access to the following files
 RedirectMatch 404 /\.git
+RedirectMatch 404 /\.editorconfig
