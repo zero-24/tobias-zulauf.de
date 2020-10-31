@@ -45,3 +45,4 @@
 #### Dont allow access to the following files
 RedirectMatch 404 /\.git
 RedirectMatch 404 /\.editorconfig
+RedirectMatch 404 /\.github
