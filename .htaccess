@@ -32,7 +32,6 @@
 
 ##### HTTP Headers
 <IfModule mod_headers.c>
-    Header set Content-Type "text/html; charset=utf-8"
 	Header set Cross-Origin-Opener-Policy "same-origin"
     Header set Cross-Origin-Resource-Policy "same-origin"
     Header set Feature-Policy: "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'"
