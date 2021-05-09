@@ -32,12 +32,14 @@
 
 ##### HTTP Headers
 <IfModule mod_headers.c>
-    Header set Cross-Origin-Opener-Policy "same-origin"
+    Header set Content-Type "text/html; charset=utf-8"
+	Header set Cross-Origin-Opener-Policy "same-origin"
     Header set Cross-Origin-Resource-Policy "same-origin"
     Header set Feature-Policy: "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'"
     Header set X-Frame-Options "DENY"
     Header set X-Content-Type-Options "nosniff"
     Header set Referrer-Policy "no-referrer"
+	Header set X-XSS-Protection "1; mode=block"
     Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'sha256-JfYgjAb4XZJSe1AUBWfJhRKo9xfSpr5ledAcv2OYL3o='; frame-ancestors 'none'; report-uri https://www.jah-tz.de/plugins/system/httpheader/csp-reporter.php?source=tobias-zulauf.de"
 </IfModule>
 #### HTTP Headers
