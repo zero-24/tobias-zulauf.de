@@ -10,9 +10,9 @@ RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-server-xampp.htm
 RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-server-server.html https://forum.joomla.de/core/attachment/17633-joomla-umzug-server-server-pdf/
 
 ##### Block Access to the GitDeploy configuration
-RedirectMatch 404 /\gitdeploy/\deploy-config.example.php
-RedirectMatch 404 /\gitdeploy/\deploy-config.php
-RedirectMatch 404 /\gitdeploy/\README.md
+RedirectMatch 404 /gitdeploy/deploy-config.example.php
+RedirectMatch 404 /gitdeploy/deploy-config.php
+RedirectMatch 404 /gitdeploy/README.md
 
 ##### Pagespeed Browser Cache
 <IfModule mod_expires.c>
