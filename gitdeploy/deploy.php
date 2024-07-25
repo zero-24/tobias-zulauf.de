@@ -19,6 +19,7 @@ $configFile = basename(__FILE__, '.php') . '-config.php';
 if (file_exists($configFile))
 {
 	define('CONFIG_FILE', $configFile);
+
 	require_once CONFIG_FILE;
 }
 
@@ -74,10 +75,10 @@ if (!is_dir(TMP_DIR))
 {
 	// Clone the repository into the TMP_DIR
 	$commands[] = sprintf(
-		'git clone --depth=1 --branch %s %s %s'
-		, BRANCH
-		, REMOTE_REPOSITORY
-		, TMP_DIR
+		'git clone --depth=1 --branch %s %s %s',
+		BRANCH,
+		REMOTE_REPOSITORY,
+		TMP_DIR
 	);
 }
 else
@@ -85,15 +86,15 @@ else
 	// TMP_DIR exists and hopefully already contains the correct remote origin
 	// so we'll fetch the changes and reset the contents.
 	$commands[] = sprintf(
-		'git --git-dir="%s.git" --work-tree="%s" fetch --tags origin %s'
-		, TMP_DIR
-		, TMP_DIR
-		, BRANCH
+		'git --git-dir="%s.git" --work-tree="%s" fetch --tags origin %s',
+		TMP_DIR,
+		TMP_DIR,
+		BRANCH
 	);
 	$commands[] = sprintf(
-		'git --git-dir="%s.git" --work-tree="%s" reset --hard FETCH_HEAD'
-		, TMP_DIR
-		, TMP_DIR
+		'git --git-dir="%s.git" --work-tree="%s" reset --hard FETCH_HEAD',
+		TMP_DIR,
+		TMP_DIR
 	);
 }
 
@@ -101,10 +102,10 @@ else
 if (defined('VERSION_FILE') && VERSION_FILE !== '')
 {
 	$commands[] = sprintf(
-		'git --git-dir="%s.git" --work-tree="%s" describe --always > %s'
-		, TMP_DIR
-		, TMP_DIR
-		, VERSION_FILE
+		'git --git-dir="%s.git" --work-tree="%s" describe --always > %s',
+		TMP_DIR,
+		TMP_DIR,
+		VERSION_FILE
 	);
 }
 
@@ -113,13 +114,13 @@ if (defined('VERSION_FILE') && VERSION_FILE !== '')
 if (defined('BACKUP_DIR') && BACKUP_DIR !== false)
 {
 	$commands[] = sprintf(
-		"tar --exclude='%s*' -czf %s/%s-%s-%s.tar.gz %s*"
-		, BACKUP_DIR
-		, BACKUP_DIR
-		, basename(TARGET_DIR)
-		, md5(TARGET_DIR)
-		, date('YmdHis')
-		, TARGET_DIR // We're backing up this directory into BACKUP_DIR
+		"tar --exclude='%s*' -czf %s/%s-%s-%s.tar.gz %s*",
+		BACKUP_DIR,
+		BACKUP_DIR,
+		basename(TARGET_DIR),
+		md5(TARGET_DIR),
+		date('YmdHis'),
+		TARGET_DIR // We're backing up this directory into BACKUP_DIR
 	);
 }
 
@@ -127,9 +128,9 @@ if (defined('BACKUP_DIR') && BACKUP_DIR !== false)
 if (defined('USE_COMPOSER') && USE_COMPOSER === true)
 {
 	$commands[] = sprintf(
-		'composer --no-ansi --no-interaction --no-progress --working-dir=%s install %s'
-		, TMP_DIR
-		, (defined('COMPOSER_OPTIONS')) ? COMPOSER_OPTIONS : ''
+		'composer --no-ansi --no-interaction --no-progress --working-dir=%s install %s',
+		TMP_DIR,
+		(defined('COMPOSER_OPTIONS')) ? COMPOSER_OPTIONS : ''
 	);
 
 	if (defined('COMPOSER_HOME') && is_dir(COMPOSER_HOME))
@@ -150,11 +151,11 @@ foreach (unserialize(EXCLUDE) as $exc)
 
 // Deployment command
 $commands[] = sprintf(
-	'rsync -rltgoDzvO %s %s %s %s'
-	, TMP_DIR
-	, TARGET_DIR
-	, (DELETE_FILES) ? '--delete-after' : ''
-	, $exclude
+	'rsync -rltgoDzvO %s %s %s %s',
+	TMP_DIR,
+	TARGET_DIR,
+	(DELETE_FILES) ? '--delete-after' : '',
+	$exclude
 );
 
 // =======================================[ Post-Deployment steps ]===
@@ -163,13 +164,13 @@ $commands[] = sprintf(
 if (CLEAN_UP)
 {
 	$commands['cleanup'] = sprintf(
-		'rm -rf %s'
-		, TMP_DIR
+		'rm -rf %s',
+		TMP_DIR
 	);
 }
 
 // =======================================[ Run the command steps ]===
-$output = '';
+
 foreach ($commands as $command)
 {
 	set_time_limit(TIME_LIMIT); // Reset the time limit for each command
@@ -214,9 +215,7 @@ foreach ($commands as $command)
 			];
 
 			mail($empfaenger, $betreff, $nachricht, $header);
-
 		}
 		break;
 	}
 }
-
