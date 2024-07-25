@@ -179,12 +179,12 @@ foreach ($commands as $command)
 		chdir(TMP_DIR); // Ensure that we're in the right directory
 	}
 
-	$tmp = [];
+	$commandResult = [];
 
-	exec($command . ' 2>&1', $tmp, $return_code); // Execute the command
+	exec($command . ' 2>&1', $commandResult, $returnCode); // Execute the command
 
 	// Error handling and cleanup
-	if ($return_code !== 0)
+	if ($returnCode !== 0)
 	{
 		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 
@@ -203,7 +203,7 @@ foreach ($commands as $command)
 			);
 			$nachricht = 'Error message:';
 
-			foreach ($tmp as $key => $value)
+			foreach ($commandResult as $key => $value)
 			{
 				$nachricht .= $value . PHP_EOL;
 			}
