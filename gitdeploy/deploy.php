@@ -205,7 +205,7 @@ foreach ($commands as $command)
 
 			foreach ($commandResult as $key => $value)
 			{
-				$nachricht .= $value . PHP_EOL;
+				$nachricht .= $value . '/n';
 			}
 
 			$header = [
