@@ -19,6 +19,9 @@ RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-server-server.ht
 <If "%{REQUEST_URI} == '/gitdeploy/README.md'">
     Require all denied
 </If>
+<If "%{REQUEST_URI} == '/VERSION'">
+    Require all denied
+</If>
 
 ##### Pagespeed Browser Cache
 <IfModule mod_expires.c>
