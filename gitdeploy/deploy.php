@@ -173,6 +173,7 @@ $output = '';
 foreach ($commands as $command)
 {
 	set_time_limit(TIME_LIMIT); // Reset the time limit for each command
+
 	if (file_exists(TMP_DIR) && is_dir(TMP_DIR))
 	{
 		chdir(TMP_DIR); // Ensure that we're in the right directory
@@ -180,7 +181,7 @@ foreach ($commands as $command)
 
 	$tmp = [];
 
-	exec($command.' 2>&1', $tmp, $return_code); // Execute the command
+	exec($command . ' 2>&1', $tmp, $return_code); // Execute the command
 
 	// Error handling and cleanup
 	if ($return_code !== 0)
@@ -194,15 +195,21 @@ foreach ($commands as $command)
 
 		if (EMAIL_ON_ERROR)
 		{
-			$empfaenger = 'niemand@example.com';
+			$empfaenger = EMAIL_ON_ERROR;
 			$betreff = sprintf(
 				'Git Deployment error on %s using %s!',
 				$_SERVER['HTTP_HOST'],
 				__FILE__,
 			);
-			$nachricht = 'Hallo';
+			$nachricht = 'Error message';
+
+			foreach ($tmp as $key => $value)
+			{
+				$nachricht .= $value . PHP_EOL;
+			}
+
 			$header = [
-				'From' => 'webmaster@example.com',
+				'From' => EMAIL_ON_ERROR_SENDER,
 				'X-Mailer' => 'PHP/' . phpversion()
 			];
 
@@ -212,4 +219,4 @@ foreach ($commands as $command)
 		break;
 	}
 }
-?>
+
