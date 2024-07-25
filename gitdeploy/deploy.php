@@ -201,7 +201,7 @@ foreach ($commands as $command)
 				$_SERVER['HTTP_HOST'],
 				__FILE__,
 			);
-			$nachricht = 'Error message';
+			$nachricht = 'Error message:';
 
 			foreach ($tmp as $key => $value)
 			{
