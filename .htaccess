@@ -9,6 +9,17 @@ RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-xampp-server.htm
 RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-server-xampp.html https://forum.joomla.de/core/attachment/17634-joomla-umzug-server-xampp-pdf/
 RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-server-server.html https://forum.joomla.de/core/attachment/17633-joomla-umzug-server-server-pdf/
 
+##### Block Access to the GitDeploy configuration
+<If "%{REQUEST_URI} == '/gitdeploy/deploy-config.example.php'">
+    Require all denied
+</If>
+<If "%{REQUEST_URI} == '/gitdeploy/deploy-config.php'">
+    Require all denied
+</If>
+<If "%{REQUEST_URI} == '/gitdeploy/README.md'">
+    Require all denied
+</If>
+
 ##### Pagespeed Browser Cache
 <IfModule mod_expires.c>
 	ExpiresActive On
