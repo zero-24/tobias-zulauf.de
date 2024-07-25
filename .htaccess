@@ -1,3 +1,13 @@
+##### Redirects for Old Joomla Extensions
+RedirectPermanent /downloads/jsm/sts/update.xml https://raw.githubusercontent.com/zero-24/plg_content_submitmailer/master/update.xml
+RedirectPermanent /downloads/extensions/jccss/sts/update.xml https://raw.githubusercontent.com/zero-24/plg_system_customcss/master/update.xml
+RedirectPermanent /downloads/jccss/sts/update.xml https://raw.githubusercontent.com/zero-24/plg_system_customcss/master/update.xml
+
+##### Redirects to the Joomla Forum
+RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-xampp-server.html https://forum.joomla.de/core/attachment/17635-joomla-umzug-xampp-server-pdf/
+RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-server-xampp.html https://forum.joomla.de/core/attachment/17634-joomla-umzug-server-xampp-pdf/
+RedirectPermanent /joomla-anleitungen/joomla-umzug/joomla-umzug-server-server.html https://forum.joomla.de/core/attachment/17633-joomla-umzug-server-server-pdf/
+
 ##### Pagespeed Browser Cache
 <IfModule mod_expires.c>
 	ExpiresActive On
