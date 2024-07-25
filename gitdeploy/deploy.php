@@ -192,10 +192,6 @@ foreach ($commands as $command)
 			shell_exec($commands['cleanup']);
 		}
 
-		$error =
-
-		error_log($error);
-
 		if (EMAIL_ON_ERROR)
 		{
 			$empfaenger = 'niemand@example.com';
