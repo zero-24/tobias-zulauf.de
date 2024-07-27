@@ -42,7 +42,7 @@ if (!extension_loaded('hash'))
 }
 
 // Check the hash algo used
-list($algo, $hash) = explode('=', $_SERVER('HTTP_X_HUB_SIGNATURE_256')) + array('', '');
+list($algo, $hash) = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE_256']) + array('', '');
 
 if (!in_array($algo, hash_algos(), true))
 {
