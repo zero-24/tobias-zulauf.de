@@ -33,12 +33,16 @@ if (!isset($_SERVER['HTTP_X_HUB_SIGNATURE_256']))
 {
 	//echo "HTTP header 'X-Hub-Signature' is missing";
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
+	header('Content-type: application/json');
+	echo json_encode(['status' => false]);
 }
 
 if (!extension_loaded('hash'))
 {
 	//echo "Missing 'hash' extension to check the secret code validity.";
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
+	header('Content-type: application/json');
+	echo json_encode(['status' => false]);
 }
 
 // Check the hash algo used
@@ -48,6 +52,8 @@ if (!in_array($algo, hash_algos(), true))
 {
 	//echo "Hash algorithm '$algo' is not supported.";
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
+	header('Content-type: application/json');
+	echo json_encode(['status' => false]);
 }
 
 $rawPost = file_get_contents('php://input');
@@ -56,6 +62,8 @@ if ($hash !== hash_hmac($algo, $rawPost, SECRET_ACCESS_TOKEN))
 {
 	//echo 'Hook secret does not match';
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
+	header('Content-type: application/json');
+	echo json_encode(['status' => false]);
 }
 
 // Check if the required programs are available
@@ -67,9 +75,10 @@ if (defined('BACKUP_DIR') && BACKUP_DIR !== false)
 
 	if (!is_dir(BACKUP_DIR) || !is_writable(BACKUP_DIR))
 	{
+		//echo sprintf('BACKUP_DIR: `%s` does not exists or is not writeable.', BACKUP_DIR);
 		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-
-		die(sprintf('BACKUP_DIR: `%s` does not exists or is not writeable.', BACKUP_DIR));
+		header('Content-type: application/json');
+		echo json_encode(['status' => false]);
 	}
 }
 
@@ -84,8 +93,10 @@ foreach ($requiredBinaries as $command)
 
 	if ($path === '')
 	{
+		//echo sprintf('<b>%s</b> not available. It needs to be installed on the server for this script to work.', $command);
 		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-		die(sprintf('<b>%s</b> not available. It needs to be installed on the server for this script to work.', $command));
+		header('Content-type: application/json');
+		echo json_encode(['status' => false]);
 	}
 }
 
@@ -196,22 +207,23 @@ if (CLEAN_UP)
 
 foreach ($commands as $command)
 {
-	set_time_limit(TIME_LIMIT); // Reset the time limit for each command
+	// Reset the time limit for each command
+	set_time_limit(TIME_LIMIT);
 
 	if (file_exists(TMP_DIR) && is_dir(TMP_DIR))
 	{
-		chdir(TMP_DIR); // Ensure that we're in the right directory
+		// Ensure that we're in the right directory
+		chdir(TMP_DIR);
 	}
 
 	$commandResult = [];
 
-	exec($command . ' 2>&1', $commandResult, $returnCode); // Execute the command
+	// Execute the command
+	exec($command . ' 2>&1', $commandResult, $returnCode);
 
 	// Error handling and cleanup
 	if ($returnCode !== 0)
 	{
-		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-
 		if (CLEAN_UP)
 		{
 			shell_exec($commands['cleanup']);
@@ -225,11 +237,12 @@ foreach ($commands as $command)
 				$_SERVER['HTTP_HOST'],
 				__FILE__,
 			);
-			$nachricht = 'Last error message:';
+
+			$nachricht = 'Last error message:/n/n';
 
 			foreach ($commandResult as $key => $value)
 			{
-				$nachricht .= $value . '/n';
+				$nachricht .= $value . '/n/n';
 			}
 
 			$header = [
@@ -239,10 +252,15 @@ foreach ($commands as $command)
 
 			mail($empfaenger, $betreff, $nachricht, $header);
 		}
+
+		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+		header('Content-type: application/json');
+		echo json_encode(['status' => false]);
+
 		break;
 	}
 }
 
 // Send status
 header('Content-type: application/json');
-echo json_encode(['status' => 'success']);
+echo json_encode(['status' => true]);
