@@ -29,9 +29,32 @@ if (!defined('CONFIG_FILE'))
 	echo 'Configuration file not found! Please create the "' . $configFile . '" file based on the deploy-config.example.php';
 }
 
-// If there's authorization error, set the correct HTTP header.
-if (!isset($_GET['token']) || $_GET['token'] !== SECRET_ACCESS_TOKEN)
+if (!isset($_SERVER['HTTP_X_HUB_SIGNATURE_256']))
 {
+	// HTTP header 'X-Hub-Signature' is missing
+	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
+}
+
+if (!extension_loaded('hash'))
+{
+	// Missing 'hash' extension to check the secret code validity.
+	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
+}
+
+// Check the hash algo used
+list($algo, $hash) = explode('=', $_SERVER('HTTP_X_HUB_SIGNATURE_256')) + array('', '');
+
+if (!in_array($algo, hash_algos(), true))
+{
+	// Hash algorithm '$algo' is not supported.
+	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
+}
+
+$rawPost = file_get_contents('php://input');
+
+if ($hash !== hash_hmac($algo, $rawPost, SECRET_ACCESS_TOKEN))
+{
+	// Hook secret does not match
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 }
 
