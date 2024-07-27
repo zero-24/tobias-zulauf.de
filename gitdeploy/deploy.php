@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * Standalone GitDeploy Script
  * This script is largly based on https://github.com/markomarkovic/simple-php-git-deploy/ version 1.3.1 but modified for my usecase
@@ -31,13 +31,13 @@ if (!defined('CONFIG_FILE'))
 
 if (!isset($_SERVER['HTTP_X_HUB_SIGNATURE_256']))
 {
-	// HTTP header 'X-Hub-Signature' is missing
+	echo "HTTP header 'X-Hub-Signature' is missing";
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 }
 
 if (!extension_loaded('hash'))
 {
-	// Missing 'hash' extension to check the secret code validity.
+	echo "Missing 'hash' extension to check the secret code validity.";
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 }
 
@@ -46,7 +46,7 @@ list($algo, $hash) = explode('=', $_SERVER('HTTP_X_HUB_SIGNATURE_256')) + array(
 
 if (!in_array($algo, hash_algos(), true))
 {
-	// Hash algorithm '$algo' is not supported.
+	echo "Hash algorithm '$algo' is not supported.";
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 }
 
@@ -54,7 +54,7 @@ $rawPost = file_get_contents('php://input');
 
 if ($hash !== hash_hmac($algo, $rawPost, SECRET_ACCESS_TOKEN))
 {
-	// Hook secret does not match
+	echo 'Hook secret does not match';
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 }
 
@@ -243,5 +243,6 @@ foreach ($commands as $command)
 	}
 }
 
+// Send status
 header('Content-type: application/json');
 echo json_encode(['status' => 'success']);
