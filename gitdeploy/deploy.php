@@ -210,9 +210,8 @@ $error = false;
 
 // Set the message when there is no error message
 $betreff = sprintf(
-	'Git Deployment successfull on %s using %s!',
+	'Git Deployment successfull on %s',
 	$_SERVER['HTTP_HOST'],
-	__FILE__,
 );
 $nachricht = '';
 
@@ -245,9 +244,8 @@ foreach ($commands as $command)
 		}
 
 		$betreff = sprintf(
-			'Git Deployment error on %s using %s!',
+			'Git Deployment error on %s',
 			$_SERVER['HTTP_HOST'],
-			__FILE__,
 		);
 
 		$nachricht = 'Last error message:/n/n';
@@ -275,9 +273,11 @@ if (EMAIL_RECEIVER && $error)
 
 if (TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_CHATID)
 {
+	$nachricht = !empty($nachricht) ? PHP_EOL . PHP_EOL . $nachricht : '';
+
 	$params = [
 		'chat_id' => TELEGRAM_BOT_CHATID,
-		'text' => $betreff . '/n/n' . $nachricht,
+		'text' => $betreff . $nachricht,
 		'disable_web_page_preview' => 'true',
 		'parse_mode' => 'markdown',
 	];
