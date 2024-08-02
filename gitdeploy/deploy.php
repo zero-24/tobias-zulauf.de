@@ -260,7 +260,7 @@ foreach ($commands as $command)
 				'chat_id' => TELEGRAM_BOT_CHATID,
 				'text' => $betreff . '/n/n' . $nachricht,
 				'disable_web_page_preview' => 'true',
-				'parse_mode' => 'markdome',
+				'parse_mode' => 'markdown',
 			];
 
 			$ch = curl_init('https://api.telegram.org/bot' . TELEGRAM_BOT_TOKEN . '/sendMessage');
