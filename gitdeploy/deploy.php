@@ -254,7 +254,7 @@ foreach ($commands as $command)
 			mail($empfaenger, $betreff, $nachricht, $header);
 		}
 
-		if (TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_CHATID)
+		if (TELEGRAM_BOT_CHATID)
 		{
 			$params = [
 				'chat_id' => TELEGRAM_BOT_CHATID,
