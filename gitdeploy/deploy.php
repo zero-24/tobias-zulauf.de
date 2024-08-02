@@ -205,6 +205,18 @@ if (CLEAN_UP)
 
 // =======================================[ Run the command steps ]===
 
+// By default here is no error
+$error = false;
+
+// Set the message when there is no error message
+$betreff = sprintf(
+	'Git Deployment successfull on %s using %s!',
+	$_SERVER['HTTP_HOST'],
+	__FILE__,
+);
+$nachricht = '';
+
+// Loop via the commands
 foreach ($commands as $command)
 {
 	// Reset the time limit for each command
@@ -224,6 +236,9 @@ foreach ($commands as $command)
 	// Error handling and cleanup
 	if ($returnCode !== 0)
 	{
+		// There is an error
+		$error = true;
+
 		if (CLEAN_UP)
 		{
 			shell_exec($commands['cleanup']);
@@ -242,44 +257,48 @@ foreach ($commands as $command)
 			$nachricht .= $value . '/n/n';
 		}
 
-		if (EMAIL_ON_ERROR)
-		{
-			$empfaenger = EMAIL_ON_ERROR;
-
-			$header = [
-				'From' => EMAIL_ON_ERROR_SENDER,
-				'X-Mailer' => 'PHP/' . phpversion()
-			];
-
-			mail($empfaenger, $betreff, $nachricht, $header);
-		}
-
-		if (TELEGRAM_BOT_CHATID)
-		{
-			$params = [
-				'chat_id' => TELEGRAM_BOT_CHATID,
-				'text' => $betreff . '/n/n' . $nachricht,
-				'disable_web_page_preview' => 'true',
-				'parse_mode' => 'markdown',
-			];
-
-			$ch = curl_init('https://api.telegram.org/bot' . TELEGRAM_BOT_TOKEN . '/sendMessage');
-			curl_setopt($ch, CURLOPT_HEADER, false);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-			$result = curl_exec($ch);
-			curl_close($ch);
-		}
-
-		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-		header('Content-type: application/json');
-		echo json_encode(['status' => false]);
-
 		break;
 	}
+}
+
+if (EMAIL_RECEIVER && $error)
+{
+	$empfaenger = EMAIL_RECEIVER;
+
+	$header = [
+		'From' => EMAIL_SENDER,
+		'X-Mailer' => 'PHP/' . phpversion()
+	];
+
+	mail($empfaenger, $betreff, $nachricht, $header);
+}
+
+if (TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_CHATID)
+{
+	$params = [
+		'chat_id' => TELEGRAM_BOT_CHATID,
+		'text' => $betreff . '/n/n' . $nachricht,
+		'disable_web_page_preview' => 'true',
+		'parse_mode' => 'markdown',
+	];
+
+	$ch = curl_init('https://api.telegram.org/bot' . TELEGRAM_BOT_TOKEN . '/sendMessage');
+	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+	$result = curl_exec($ch);
+	curl_close($ch);
+}
+
+// When there is an error set the status to false
+if ($error)
+{
+	header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+	header('Content-type: application/json');
+	echo json_encode(['status' => false]);
 }
 
 // Send status
