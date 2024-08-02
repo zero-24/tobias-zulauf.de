@@ -1,5 +1,13 @@
 <?php
 /**
+ * Standalone GitDeploy Script
+ * This script is largly based on https://github.com/markomarkovic/simple-php-git-deploy/tree/1.3.1 version 1.3.1 but modified for my usecase
+ *
+ * @copyright  Copyright (C) 2024 Tobias Zulauf All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
+ */
+
+/**
  * Deployment configuration
  *
  * Rename this file to `deploy-config.php` and edit the
@@ -152,3 +160,19 @@ define('EMAIL_ON_ERROR', false);
  * @var string A single email address e.g. 'someone@example.com'
  */
 define('EMAIL_ON_ERROR_SENDER', false);
+
+/**
+ * OPTIONAL
+ * The Telegram Bot Token to send the message from
+ *
+ * @var string The bot token as requested by the https://telegram.me/BotFather / https://gist.github.com/nafiesl/4ad622f344cd1dc3bb1ecbe468ff9f8a
+ */
+define('TELEGRAM_BOT_TOKEN', false);
+
+/**
+ * OPTIONAL
+ * The Telegram Bot CHATID to send the message to
+ *
+ * @var string The chatID from the chat with the telegram bot: https://gist.github.com/nafiesl/4ad622f344cd1dc3bb1ecbe468ff9f8a
+ */
+define('TELEGRAM_BOT_CHATID', false);

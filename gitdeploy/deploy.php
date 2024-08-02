@@ -1,7 +1,7 @@
 <?php
 /**
  * Standalone GitDeploy Script
- * This script is largly based on https://github.com/markomarkovic/simple-php-git-deploy/ version 1.3.1 but modified for my usecase
+ * This script is largly based on https://github.com/markomarkovic/simple-php-git-deploy/tree/1.3.1 version 1.3.1 but modified for my usecase
  *
  * @copyright  Copyright (C) 2024 Tobias Zulauf All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License Version 2 or Later
@@ -229,21 +229,22 @@ foreach ($commands as $command)
 			shell_exec($commands['cleanup']);
 		}
 
+		$betreff = sprintf(
+			'Git Deployment error on %s using %s!',
+			$_SERVER['HTTP_HOST'],
+			__FILE__,
+		);
+
+		$nachricht = 'Last error message:/n/n';
+
+		foreach ($commandResult as $key => $value)
+		{
+			$nachricht .= $value . '/n/n';
+		}
+
 		if (EMAIL_ON_ERROR)
 		{
 			$empfaenger = EMAIL_ON_ERROR;
-			$betreff = sprintf(
-				'Git Deployment error on %s using %s!',
-				$_SERVER['HTTP_HOST'],
-				__FILE__,
-			);
-
-			$nachricht = 'Last error message:/n/n';
-
-			foreach ($commandResult as $key => $value)
-			{
-				$nachricht .= $value . '/n/n';
-			}
 
 			$header = [
 				'From' => EMAIL_ON_ERROR_SENDER,
@@ -251,6 +252,26 @@ foreach ($commands as $command)
 			];
 
 			mail($empfaenger, $betreff, $nachricht, $header);
+		}
+
+		if (TELEGRAM_BOT_TOKEN && TELEGRAM_BOT_CHATID)
+		{
+			$params = [
+				'chat_id' => TELEGRAM_BOT_CHATID,
+				'text' => $betreff . '/n/n' . $nachricht,
+				'disable_web_page_preview' => 'true',
+				'parse_mode' => 'markdome',
+			];
+
+			$ch = curl_init('https://api.telegram.org/bot' . TELEGRAM_BOT_TOKEN . '/sendMessage');
+			curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+			$result = curl_exec($ch);
+			curl_close($ch);
 		}
 
 		header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
