@@ -55,7 +55,7 @@ RedirectMatch 404 /gitdeploy/README.md
     Header set X-Content-Type-Options "nosniff"
     Header set Referrer-Policy "no-referrer"
 	Header set X-XSS-Protection "1; mode=block"
-    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'sha256-JfYgjAb4XZJSe1AUBWfJhRKo9xfSpr5ledAcv2OYL3o='; frame-ancestors 'none'; report-uri https://www.jah-tz.de/plugins/system/httpheader/csp-reporter.php?source=tobias-zulauf.de"
+    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'sha256-JfYgjAb4XZJSe1AUBWfJhRKo9xfSpr5ledAcv2OYL3o='; frame-ancestors 'none';"
 </IfModule>
 #### HTTP Headers
 
