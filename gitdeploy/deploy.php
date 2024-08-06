@@ -210,7 +210,7 @@ $error = false;
 
 // Set the message when there is no error message
 $betreff = sprintf(
-	'Git Deployment successfull on %s',
+	'Git Deployment successful on %s',
 	$_SERVER['HTTP_HOST'],
 );
 $nachricht = '';
