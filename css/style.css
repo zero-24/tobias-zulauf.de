@@ -507,6 +507,11 @@ body {
 	content:"\f118"
 }
 
+.fa-laptop:before
+{
+	content:"\f109"
+}
+
 .modal-window {
     position: fixed;
     background-color: rgba(22,97,190, 0.5);
